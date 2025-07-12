@@ -1,0 +1,26 @@
+/* Sets the base font for the entire application */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Styles for the drag-and-drop zone when a file is being dragged over it */
+.drop-zone-active {
+    border-color: #3b82f6; /* blue-500 */
+    background-color: #1f2937; /* gray-800 */
+}
+
+/* Styles for the loading spinner animation */
+.loader {
+    border: 4px solid #f3f3f3; /* light grey */
+    border-top: 4px solid #3498db; /* blue */
+    border-radius: 50%;
+    width: 24px; /* Smaller loader */
+    height: 24px;
+    animation: spin 1s linear infinite;
+}
+
+/* Keyframe animation for the spinner rotation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
