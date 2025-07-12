@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Converter</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl bg-gray-800 rounded-xl shadow-2xl p-6 md:p-8">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Universal Image Converter</h1>
+            <p class="text-gray-400 mt-2">Convert images to any format, right in your browser. Fast, secure, and free.</p>
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content">
+            <!-- Upload Area -->
+            <div id="upload-area">
+                <label for="file-upload" id="drop-zone" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer bg-gray-800 hover:bg-gray-700 transition-colors duration-300">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-10 h-10 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-400"><span class="font-semibold text-blue-400">Click to upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-500">PNG, JPG, GIF, WEBP, BMP, etc.</p>
+                    </div>
+                    <input id="file-upload" type="file" class="hidden" accept="image/*" />
+                </label>
+            </div>
+             <!-- Error Message -->
+            <div id="error-message" class="hidden mt-4 text-center bg-red-900 border border-red-700 text-red-300 px-4 py-3 rounded-lg relative" role="alert">
+                <strong class="font-bold">Error:</strong>
+                <span class="block sm:inline" id="error-text"></span>
+            </div>
+        </div>
+
+        <!-- Conversion Interface -->
+        <div id="conversion-interface" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                <!-- Original Image Preview -->
+                <div class="w-full">
+                    <h3 class="text-lg font-semibold mb-2 text-white">Original Image</h3>
+                    <div class="bg-gray-700 p-2 rounded-lg">
+                        <img id="image-preview" src="#" alt="Image Preview" class="rounded-md max-h-80 w-full object-contain">
+                    </div>
+                    <div id="original-info" class="text-sm text-gray-400 mt-2"></div>
+                </div>
+
+                <!-- Conversion Controls & Result -->
+                <div class="w-full">
+                    <h3 class="text-lg font-semibold mb-2 text-white">Convert To</h3>
+                    <div class="bg-gray-700 p-4 rounded-lg">
+                        <!-- Format Selection -->
+                        <div class="mb-4">
+                            <label for="format-select" class="block mb-2 text-sm font-medium text-gray-300">Target Format:</label>
+                            <select id="format-select" class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <option value="png">PNG</option>
+                                <option value="jpeg">JPEG</option>
+                                <option value="webp">WEBP</option>
+                                <option value="gif">GIF</option>
+                                <option value="bmp">BMP</option>
+                                <option value="tiff">TIFF</option>
+                            </select>
+                        </div>
+
+                        <!-- JPEG Quality Slider -->
+                        <div id="quality-control" class="mb-4 hidden">
+                            <label for="quality-slider" class="block mb-2 text-sm font-medium text-gray-300">JPEG Quality: <span id="quality-value">0.92</span></label>
+                            <input id="quality-slider" type="range" min="0.1" max="1.0" step="0.01" value="0.92" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- Convert Button -->
+                        <button id="convert-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                           <span id="convert-btn-text">Convert</span>
+                           <div id="loader" class="loader hidden ml-3"></div>
+                        </button>
+                    </div>
+
+                    <!-- Result Area -->
+                    <div id="result-area" class="mt-4 hidden">
+                        <h3 class="text-lg font-semibold mb-2 text-white">Converted Image</h3>
+                        <div class="bg-gray-700 p-2 rounded-lg">
+                             <img id="result-image" src="#" alt="Result Image" class="rounded-md max-h-60 w-full object-contain">
+                        </div>
+                        <div id="result-info" class="text-sm text-gray-400 mt-2"></div>
+                        <a id="download-btn" href="#" download="converted-image.png" class="mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+             <!-- Convert Another Button -->
+            <div class="text-center mt-8">
+                <button id="reset-btn" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">Convert another image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
