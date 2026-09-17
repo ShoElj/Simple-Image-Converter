@@ -24,3 +24,8 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Tints the native audio player to match the dark theme */
+audio {
+    filter: invert(0.9) hue-rotate(180deg);
+}
